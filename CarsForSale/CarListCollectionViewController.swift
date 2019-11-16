@@ -11,6 +11,8 @@ import UIKit
 private let reuseIdentifier = "Cell"
 
 class CarListCollectionViewController: UICollectionViewController {
+    
+    let carController = CarController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,21 +40,32 @@ class CarListCollectionViewController: UICollectionViewController {
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return 0
+        return carController.cars.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-    
-        // Configure the cell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CarCell", for: indexPath) as? CarCollectionViewCell else { return CarCollectionViewCell() }
+        
+        let car = carController.cars[indexPath.row]
+        cell.car = car
     
         return cell
+    }
+    
+    override func  prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowCarSegue" {
+            guard let indexPath = collectionView.indexPathsForSelectedItems?.first?.item,
+                let carVC = segue.destination as? CarDetailViewController else { return }
+            
+            let selectedCar = carController.cars[indexPath]
+            carVC.car = selectedCar
+        }
     }
 
     // MARK: UICollectionViewDelegate

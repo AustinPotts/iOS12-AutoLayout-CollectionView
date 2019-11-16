@@ -8,19 +8,26 @@
 
 import UIKit
 
-class CarViewController: UIViewController {
+class CarDetailViewController: UIViewController {
 
     @IBOutlet weak var carNameLabel: UILabel!
     @IBOutlet weak var carImage: UIImageView!
     @IBOutlet weak var priceLabel: UILabel!
     
+    var car: Car?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        updateViews()
     }
     
-
+    func updateViews() {
+        if let car = car {
+            carNameLabel.text = car.name
+            carImage.image = car.image
+        }
+    }
     /*
     // MARK: - Navigation
 
